@@ -1,2 +1,3 @@
-# consumindo_api_ViaCEP
-exemplo de ultilização da api ViaCEP
+# API ViaCEP usage example
+Um simples exemplo de ultilização da API ViaCEP
+
