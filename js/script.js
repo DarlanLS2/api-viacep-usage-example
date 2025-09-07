@@ -1,34 +1,50 @@
 class CepFinder {
-  async getCepInfos(cep) {
+  async search(cep) {
+    return this.fetchApiViaCep(cep)
+  }
+
+  async fetchApiViaCep(cep) {
     let response = await fetch(`https://viacep.com.br/ws/${cep}/json/`)
-    let data = await response.json(); 
-    return data;
+    return await response.json(); 
   }
 }
 
 class View {
-  constructor(inputSelector, resultDivSelector, cepFinder) {
-    this.cepInput = document.querySelector(inputSelector);
-    this.resultDiv = document.querySelector(resultDivSelector);
+  constructor(selectors, cepFinder) {
+    this.cepInput = document.querySelector(selectors.cepInput);
+    this.resultDiv = document.querySelector(selectors.resultDiv);
     this.cepFinder = cepFinder;
   }
 
-  formatCepData(data) {
+  async showCepDetails() {
+    this.insertInfosIntoDiv(await this.getCepInfos())
+  }
+
+  async getCepInfos() {
+    return await this.cepFinder.search(this.cepInput.value);
+  }
+
+  insertInfosIntoDiv(cepInfos) {
+    this.resultDiv.innerHTML = this.formatCepData(cepInfos)  
+  }
+
+  formatCepData(cepInfos) {
     return `
       <hr>
       <h2>Detalhes:</h2>
-      <p>Estado: ${data.estado}</p>
-      <p>Cidade: ${data.localidade}</p>
-      <p>Bairro: ${data.bairro}</p>
-      <p>Rua: ${data.logradouro}</p>
+      <p>Estado: ${cepInfos.estado}</p>
+      <p>Cidade: ${cepInfos.localidade}</p>
+      <p>Bairro: ${cepInfos.bairro}</p>
+      <p>Rua: ${cepInfos.logradouro}</p>
     `;
-  }
-
-  async showCepDetails() {
-    let data = await cepFinder.getCepInfos(this.cepInput.value);
-    this.resultDiv.innerHTML = this.formatCepData(data)  
   }
 }
 
 const cepFinder = new CepFinder();
-const view = new View("#cep", "#divResultado", cepFinder)
+
+let selectors = {
+  cepInput: "#cep",
+  resultDiv: "#divResultado"
+}
+
+const view = new View(selectors, cepFinder)
