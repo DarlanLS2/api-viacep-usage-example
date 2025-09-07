@@ -9,35 +9,10 @@
   <h1>Consulta de CEP</h1>
   <label for="cep">Digite o CEP:</label>
   <input type="number" id="cep"/>
-  <!--Executa a função consultar para buscar o CEP e exibir o resultado-->
-  <button onClick=consultar()>Consultar</button> 
+  <button onClick=view.showCepDetails()>Consultar</button> 
+  <br>
+  <br>
   <div id="divResultado"></div>
-
-  <script>
-    /* Consome a api ViaCEP com o cep digitadoe executa a função 
-    mostrar dados com osdados retornados da api */
-    let consultar = () => {
-      let cep = document.querySelector("#cep").value; // Obtém o valor do campo de entrada
-      let url = `https://viacep.com.br/ws/${cep}/json/`; // Define a URL da API usando o CEP inserido
-      /* O método fetch envia uma requisição HTTP para a URL fornecida
-         e retorna uma Promise que contém a resposta da API */
-      fetch(url).then((resposta) => {
-        /* Converte a resposta para JSON e chama a função 
-           mostrarDados() com os dados retornados pela API */
-        resposta.json().then((dados) => { mostrarDados(dados) }) 
-      });
-    }
-
-    // Insere os dados dentro da divResultado com uma formatação mais legivel 
-    let mostrarDados = (dados) => {
-      let div = document.querySelector("#divResultado"); // Seleciona a div onde os dados serão exibidos
-      // Insere na div o conteúdo HTML com os dados retornados da API
-      div.innerHTML =  
-       `<p>Endereço: ${dados.logradouro}</p>
-        <p>Bairro: ${dados.bairro}</p>
-        <p>Complemento: ${dados.complemento}</p>
-        <p>Cidade: ${dados.localidade}/${dados.uf}</p>`;
-    }
-  </script>
+  <script src="./js/script.js"></script>
 </body>
 </html>
